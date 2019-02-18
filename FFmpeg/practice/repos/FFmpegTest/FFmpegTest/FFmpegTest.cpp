@@ -209,8 +209,8 @@ void extractAudio() {
 int main(int argc, char* argv[]) {
 	
 	/** 0.FFmpeg Hello World **/
-	//av_register_all();
-	//printf("%s\n", avcodec_configuration());
+	av_register_all();
+	printf("%s\n", avcodec_configuration());
 
 	/** 1.FFmpeg Log System **/
 	//av_log_set_level(AV_LOG_INFO);
