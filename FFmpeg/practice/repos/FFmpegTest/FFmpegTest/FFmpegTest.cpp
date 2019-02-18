@@ -3,6 +3,7 @@
 
 #include "pch.h"
 #include <iostream>
+#include "AACFormat.h"
 
 #define __STDC_CONSTANT_MACROS
 #define __STDC_FORMAT_MACROS
@@ -104,16 +105,112 @@ void ffmpegVideoMeta() {
 		printf("Cant open File: %s\n", av_err2str(ret));
 	}
 
+	// 参数为AVFormatContext上下文、流索引值（一般不用关心，直接写0）、文件名、是否是输入出文件（1：是  0：不是）	
 	av_dump_format(fmt_ctx, 0, "111.mp4", 0);
 
+	// 关闭打开的多媒体文件
 	avformat_close_input(&fmt_ctx);
+}
+
+// 使用FFmpeg从视频中抽取音频
+void extractAudio() {
+
+	/******************************************************
+	 * TODO：目前存在抽取后不能播放的问题
+	 * 推测1：Header 不对，建议研究AAC后尝试调试
+	 * 推测2：转码的MP4的ACC格式不对，也需要研究ACC
+	 * 感觉代码写的没问题，此段代码非常需要调好，但是需要学习
+	 * 的知识也很多，慢慢来吧。
+	 ******************************************************/
+
+	// 设置日志输出等级
+	av_log_set_level(AV_LOG_INFO); 
+
+	AVFormatContext *fmt_ctx = NULL;
+	AVPacket pkt;
+
+	av_register_all();
+
+	int ret;
+	int len;
+	int audio_index = -1;
+
+	// 打开输入文件
+	ret = avformat_open_input(&fmt_ctx, "111.mp4", NULL, NULL);
+
+	// 检查打开输入文件是否成功
+	if (ret < 0) {
+		printf("cant open file，error message = %s", av_err2str(ret));
+		return;
+	}
+
+	// 打开输入文件成功，打印一下Meta信息
+	// av_dump_format(fmt_ctx, 0, "111.flv", 0);
+
+
+	// 打开输出文件
+	FILE* dst_fd = fopen("111.aac", "wb");  // w 写入  b 二进制文件
+
+	// 检查输出文件打开是否成功，如果失败，就输出日志，并关闭输出文件的引用
+	if (!dst_fd) {
+		av_log(NULL, AV_LOG_ERROR, "Can't Open Out File!\n");
+		avformat_close_input(&fmt_ctx);
+	}
+
+	// 获取到音频流(使用av_find_best_stream：多媒体文件中拿到想使用的最好的一路流）
+
+	av_init_packet(&pkt);
+	pkt.data = NULL;
+	pkt.size = 0;
+	
+	ret = av_find_best_stream(fmt_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0); 
+	for (int i = 0; i < fmt_ctx->nb_streams; i++) {
+		if (fmt_ctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO) {
+			audio_index = i;
+			break;
+		}
+ 	}
+
+	printf("Audio Stream Index = %d", audio_index);
+	
+	// 检查发现音频流的结果
+	if (audio_index < 0) {
+		av_log(NULL, AV_LOG_ERROR, "Can't find Best Audio Stream!\n");
+		//printf("Reason = %s", av_err2str(ret));
+		// 关闭输出文件和输出文件的引用
+		avformat_close_input(&fmt_ctx);
+		fclose(dst_fd);
+		return;
+	}
+
+	while (av_read_frame(fmt_ctx, &pkt) >= 0) {
+		if (pkt.stream_index == audio_index) {
+			printf("Has Read An Audio Packet\n");
+			char adts_header_buf[7];
+			adts_header(adts_header_buf, pkt.size);
+			fwrite(adts_header_buf, 1, 7, dst_fd);
+			len = fwrite(pkt.data, 1, pkt.size, dst_fd);
+			if (len != pkt.size) {
+				av_log(NULL, AV_LOG_WARNING, "Waring! Length of data not equal size of pkt!\n");
+			}
+		}
+		// 将引用基数减一
+		av_packet_unref(&pkt);
+		//av_free_packet(&pkt);
+	}
+
+	// 关闭文件（输入/输出）
+	avformat_close_input(&fmt_ctx);
+	if (dst_fd) {
+		fclose(dst_fd);
+	}
 }
 
 int main(int argc, char* argv[]) {
 	
 	/** 0.FFmpeg Hello World **/
-	// av_register_all();
-	// printf("%s\n", avcodec_configuration());
+	//av_register_all();
+	//printf("%s\n", avcodec_configuration());
 
 	/** 1.FFmpeg Log System **/
 	//av_log_set_level(AV_LOG_INFO);
@@ -134,7 +231,11 @@ int main(int argc, char* argv[]) {
 	//ffmpegDir();  // 文件目录操作
 
 	/** 6.使用FFmpeg操作文件目录使用FFmpeg打印多媒体的Mate信息 **/
-	ffmpegVideoMeta(); // FFmpeg打印多媒体文件的Meta信息
+	//ffmpegVideoMeta(); // FFmpeg打印多媒体文件的Meta信息
+
+	/** 7.使用FFmpeg从视频中抽取音频 **/
+	//extractAudio();
+
 
 	return 0;
 }

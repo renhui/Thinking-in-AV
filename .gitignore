@@ -1,0 +1,9 @@
+
+*.vcxproj
+*.vcxproj
+*.opendb
+*.ilk
+*.filters
+*.ipch
+*.rc
+*.aps
