@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AACFormat.h"
 
+// HE-ACC Header
 void adts_header(char *szAdtsHeader, int dataLen) {
 
 	int audio_object_type = 2;
