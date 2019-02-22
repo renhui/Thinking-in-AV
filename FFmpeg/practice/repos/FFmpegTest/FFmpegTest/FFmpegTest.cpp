@@ -5,6 +5,14 @@
 #include <iostream>
 #include "AACFormat.h"
 
+extern "C" {
+#include <stdio.h>
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
+#include "libavutil/timestamp.h"
+#include "libavutil/log.h"
+}
+
 #define __STDC_CONSTANT_MACROS
 #define __STDC_FORMAT_MACROS
 
@@ -27,19 +35,10 @@
 #endif
 
 
-extern "C"{
-#include <stdio.h>
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libavutil/timestamp.h"
-#include "libavutil/log.h"
-}
+
 
 // For extractVideo
-static int alloc_and_copy(AVPacket *out,
-	const uint8_t *sps_pps, uint32_t sps_pps_size,
-	const uint8_t *in, uint32_t in_size)
-{
+static int alloc_and_copy(AVPacket *out, const uint8_t *sps_pps, uint32_t sps_pps_size, const uint8_t *in, uint32_t in_size) {
 	uint32_t offset = out->size;
 	uint8_t nal_header_size = offset ? 3 : 4;
 	int err;
@@ -447,6 +446,8 @@ void extractAudio_HE_ACC() {
 		fclose(dst_fd);
 	}
 }
+
+// 使用FFmpeg的API从视频中抽取音频
 void extractAudio() {
 	/**
 	* 调用 av_guess_format 让ffmpeg帮你找到一个合适的文件格式。
@@ -649,7 +650,7 @@ void extractVideo() {
 }
 
 
-// 使用FFmpeg将mp4转成flv
+// 使用FFmpeg将MP4转成FLV
 void ffmpegMP42FLV() {
 
 	// 核心API
@@ -794,8 +795,8 @@ end:
 int main(int argc, char* argv[]) {
 	
 	/** 0.FFmpeg Hello World **/
-	//av_register_all();
-	//printf("%s\n", avcodec_configuration());
+	av_register_all();
+	printf("%s\n", avcodec_configuration());
 
 	/** 1.FFmpeg Log System **/
 	//av_log_set_level(AV_LOG_INFO);
@@ -825,7 +826,8 @@ int main(int argc, char* argv[]) {
 	/** 8.使用FFmpeg从视频中抽取视频 **/
 	//extractVideo();
 
-	ffmpegMP42FLV();
+	/** 9.使用FFmpeg将视频从MP4转封装为FLV格式**/
+	//ffmpegMP42FLV();
 
 	/** 至此基本的单元的操作内容基本完成，后续要学习的是更深一层的知识 */
 
