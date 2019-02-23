@@ -35,8 +35,6 @@ extern "C" {
 #endif
 
 
-
-
 // For extractVideo
 static int alloc_and_copy(AVPacket *out, const uint8_t *sps_pps, uint32_t sps_pps_size, const uint8_t *in, uint32_t in_size) {
 	uint32_t offset = out->size;
@@ -943,8 +941,8 @@ void ffmpegCutVideo() {
 int main(int argc, char* argv[]) {
 	
 	/** 0.FFmpeg Hello World **/
-	//av_register_all();
-	//printf("%s\n", avcodec_configuration());
+	av_register_all();
+	printf("%s\n", avcodec_configuration());
 
 	/** 1.FFmpeg Log System **/
 	//av_log_set_level(AV_LOG_INFO);
@@ -978,11 +976,10 @@ int main(int argc, char* argv[]) {
 	//ffmpegMP42FLV();
 
 	/** 10.使用FFmpeg剪切视频 **/
-	ffmpegCutVideo();
+	//ffmpegCutVideo();
 
-	/** 至此基本的单元的操作内容基本完成，后续要学习的是更深一层的知识 */
-
-	/** 未来可能需要更进一步学习的是，这10个Demo涉及到的知识点，然后再往后继续学习 */
+	/** 至此基本的单元的操作内容基本完成，主要学习的是使用FFmpeg对音视频的转封装开发 ***/
+	/** 需要更进一步学习这10个Demo涉及到的知识点 */
 
 	return 0;
 }
