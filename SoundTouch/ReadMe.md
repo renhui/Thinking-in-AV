@@ -4,5 +4,5 @@ SoundTouch是一个开源的音频处理库，主要实现包含变速、变调�
 
 #### 二、下载地址 
 
-SoundTouch下载地址： http://www.surina.net/soundtouch/sourcecode.html 
+SoundTouch 代码下载地址： https://gitlab.com/soundtouch/soundtouch
 
