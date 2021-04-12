@@ -3,17 +3,17 @@
 
 
 
-#### 一、音视频编解码技术
+#### 
 
 - [音视频编解码技术（一）：MPEG-4/H.264 AVC 编解码标准](https://www.cnblogs.com/renhui/p/7019424.html)
 - [音视频编解码技术（二）：AAC 音频编码技术](https://www.cnblogs.com/renhui/p/10412630.html)
 
-#### 二、流媒体协议
+#### 
 
 - [流媒体协议（一）：HLS 协议](https://www.cnblogs.com/renhui/p/8081869.html)
 - [流媒体协议（二）：RTMP协议](https://www.cnblogs.com/renhui/p/6641244.html)
 
-#### 三、多媒体文件格式
+#### 
 
 - [多媒体文件格式（一）：MP4 格式](https://www.cnblogs.com/renhui/p/10341555.html)
 - [多媒体文件格式（二）：FLV 格式](https://www.cnblogs.com/renhui/p/10348629.html)
@@ -21,7 +21,7 @@
 - [多媒体文件格式（四）：TS 格式](https://www.cnblogs.com/renhui/p/10362640.html)
 - [多媒体文件格式（五）：PCM / WAV 格式](https://www.cnblogs.com/renhui/p/12148330.html)
 
-#### 四、FFmpeg 相关
+#### 
 
 - [FFmpeg命令行工具学习(一)：查看媒体文件头信息工具ffprobe](http://www.cnblogs.com/renhui/p/9209664.html)
 - [FFmpeg命令行工具学习(二)：播放媒体文件的工具ffplay](http://www.cnblogs.com/renhui/p/8458802.html)
@@ -49,7 +49,9 @@
 - [FFmpeg 结构体学习(七)： AVIOContext 分析](https://www.cnblogs.com/renhui/p/9494887.html)
 - [FFmpeg 结构体学习(八)：FFMPEG中重要结构体之间的关系](https://www.cnblogs.com/renhui/p/9494890.html)
 
-#### 五、音视频开发开源库
+#### 
+
+开源项目：
 
 [GPUImage](https://github.com/CyberAgent/android-gpuimage)、[IjkPlayer](https://github.com/Bilibili/ijkplayer)、[librestreaming](https://github.com/lakeinchina/librestreaming)、[RTMPDump](http://rtmpdump.mplayerhq.hu/)、[SoundTouch](http://www.surina.net/soundtouch/sourcecode.html)
 
